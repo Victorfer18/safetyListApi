@@ -1,7 +1,5 @@
 <?php
 
-var_dump("tafarelllll");
-die;
 // Check PHP version.
 $minPhpVersion = '7.4';
 if (version_compare(PHP_VERSION, $minPhpVersion, '<')) {
