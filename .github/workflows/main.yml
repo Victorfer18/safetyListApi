@@ -8,12 +8,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          ARGS: -rlgoDzvci --delete --exclude vendor/ --exclude .env
+          ARGS: "-rlgoDzvc -i --delete --exclude vendor --exclude .env"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
