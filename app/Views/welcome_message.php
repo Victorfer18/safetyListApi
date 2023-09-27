@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>CodeIgniter 4.4!</title>
+    <title>CodeIgniter 4.4 !</title>
     <meta name="description" content="The small framework with powerful features">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="/favicon.ico">
@@ -24,7 +24,7 @@
         body {
             color: rgba(33, 37, 41, 1);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-            font-size: 16px;
+            font-size: 18px;
             margin: 0;
             padding: 0;
             -webkit-font-smoothing: antialiased;
