@@ -15,6 +15,7 @@ class ClientController extends BaseController
 
     public function getClientsByIdParent(int $id_parent)
     {
+        
         $query = $this->db->table('client as CLI')
             ->select([
                 'CLI.client_id',
