@@ -132,7 +132,6 @@ class InspectionController extends BaseController
 
         $clientIds = $query->getResultArray();
         $clientIds = array_column($clientIds, 'client_id');
-
         $query = $this->db->table('sys SYS')
             ->select('SYS.system_id, SYS.client_id, CLI.client_level, CLI.client_parent, SYS.situation_id, SYS.system_type_id, TYP.system_type_name, TYP.system_type_icon, GRP.system_group_id, GRP.system_group_name, SYSP.is_closed, SYSP.inspection_id')
             ->join('client CLI', 'CLI.client_id = SYS.client_id')
@@ -147,6 +146,22 @@ class InspectionController extends BaseController
             ->get();
 
         $inspectables = $query->getResultArray();
+        $inspectables = array_map(function ($item) {
+            return [
+                "system_id" => intval($item["system_id"]),
+                "client_id" => intval($item["client_id"]),
+                "client_level" => intval($item["client_level"]),
+                "client_parent" => intval($item["client_parent"]),
+                "situation_id" => intval($item["situation_id"]),
+                "system_type_id" => intval($item["system_type_id"]),
+                "system_type_name" => $item["system_type_name"],
+                "system_type_icon" => "https://safety2u.com.br/painelhomolog/assets/img/" . $item["system_type_icon"],
+                "system_group_id" => intval($item["system_group_id"]),
+                "system_group_name" => $item["system_group_name"],
+                "is_closed" => intval($item["is_closed"]),
+                "inspection_id" => intval($item["inspection_id"])
+            ];
+        }, $inspectables);
 
         return $this->successResponse(INFO_SUCCESS, $inspectables);
     }
