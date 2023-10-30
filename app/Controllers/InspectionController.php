@@ -191,6 +191,16 @@ class InspectionController extends BaseController
         $action = $this->request->getVar('action');
         $image = $this->request->getFile('image');
 
+        return $this->successResponse(INFO_SUCCESS, [
+            'system_type_id' => $system_type_id,
+            'maintenance_type_id' => $maintenance_type_id,
+            'user_id' => $user_id,
+            'client_parent' => $client_parent,
+            'consistency_status' => $consistency_status,
+            'observation' => $observation,
+            'action' => $action,
+            'image' => $image
+        ]);
         if (!$consistency_status) {
             if (!$this->validate(['action' => 'required'])) {
                 return $this->validationErrorResponse();
