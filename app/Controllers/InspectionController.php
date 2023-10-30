@@ -175,7 +175,7 @@ class InspectionController extends BaseController
             'consistency_status' => 'required|in_list[true, false]',
             'observation' => 'required',
             'client_parent' => 'required|numeric',
-            // 'image' => 'uploaded[image]|mime_in[image,image/jpg,image/jpeg,image/png]'
+            'image' => 'uploaded[image]|mime_in[image,image/jpg,image/jpeg,image/png]'
         ];
 
         if (!$this->validate($rules)) {
@@ -190,16 +190,7 @@ class InspectionController extends BaseController
         $observation = $this->request->getVar('observation');
         $action = $this->request->getVar('action');
         $image = $this->request->getFile('image');
-        return $this->successResponse(INFO_SUCCESS, [
-            'system_type_id' => $system_type_id,
-            'maintenance_type_id' => $maintenance_type_id,
-            'user_id' => $user_id,
-            'client_parent' => $client_parent,
-            'consistency_status' => $consistency_status,
-            'observation' => $observation,
-            'action' => $action,
-            'image' => $image
-        ]);
+
         if (!$consistency_status) {
             if (!$this->validate(['action' => 'required'])) {
                 return $this->validationErrorResponse();
