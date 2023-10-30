@@ -190,7 +190,7 @@ class InspectionController extends BaseController
         $observation = $this->request->getVar('observation');
         $action = $this->request->getVar('action');
         $image = $this->request->getFile('image');
-        var_dump([
+        return $this->successResponse(INFO_SUCCESS, [
             'system_type_id' => $system_type_id,
             'maintenance_type_id' => $maintenance_type_id,
             'user_id' => $user_id,
@@ -200,7 +200,6 @@ class InspectionController extends BaseController
             'action' => $action,
             'image' => $image
         ]);
-        die;
         if (!$consistency_status) {
             if (!$this->validate(['action' => 'required'])) {
                 return $this->validationErrorResponse();
