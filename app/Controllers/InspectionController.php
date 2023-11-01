@@ -177,7 +177,7 @@ class InspectionController extends BaseController
             'consistency_status' => 'required|in_list[true, false]',
             'observation' => 'required',
             'client_parent' => 'required|numeric',
-            'image' => 'uploaded[image]|mime_in[image,image/jpg,image/jpeg,image/png]'
+            // 'image' => 'uploaded[image]|mime_in[image,image/jpg,image/jpeg,image/png]'
         ];
 
         if (!$this->validate($rules)) {
