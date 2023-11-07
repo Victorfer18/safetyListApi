@@ -285,6 +285,7 @@ class InspectionController extends BaseController
 
         $maintenanceTypes = [];
 
+        $faker = \Faker\Factory::create();
         foreach ($results as $result) {
             $modifiedResults = [];
             for ($count = 1; $count <= ($result->qtd_total ?? 1); $count++) {
@@ -297,16 +298,6 @@ class InspectionController extends BaseController
             }
             $maintenanceTypes = array_merge($maintenanceTypes, $modifiedResults);
         }
-
-
-        $faker = \Faker\Factory::create();
-        $maintenanceTypes = array_map(function ($item) use ($faker) {
-            return [
-                'id' => $faker->uuid(),
-                'maintenance_type_id' => $item['maintenance_type_id'],
-                'maintenance_type_name' => $item['maintenance_type_name'],
-            ];
-        }, $maintenanceTypes);
 
         return $this->successResponse(INFO_SUCCESS, $maintenanceTypes);
     }
