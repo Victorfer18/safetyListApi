@@ -295,8 +295,6 @@ class InspectionController extends BaseController
             ];
         }
 
-        $maintenanceTypes = array_unique($maintenanceTypes, SORT_REGULAR);
-
         return $this->successResponse(INFO_SUCCESS, $maintenanceTypes);
     }
 
