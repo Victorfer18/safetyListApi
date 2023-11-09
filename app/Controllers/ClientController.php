@@ -36,6 +36,8 @@ class ClientController extends BaseController
             ->orderBy('INF.info_name', 'ASC')
             ->get();
         $result = $query->getResultArray();
+        var_dump($result);
+        die;
         $payload = array_map(function ($item) {
             return [
                 'id' => $item['client_id'],
