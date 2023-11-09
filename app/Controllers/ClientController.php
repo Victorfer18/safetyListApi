@@ -36,17 +36,17 @@ class ClientController extends BaseController
             ->orderBy('INF.info_name', 'ASC')
             ->get();
         $result = $query->getResultArray();
-        $payload = array_map(function ($item) {
-            return [
-                'id' => $item['client_id'],
-                'name' => $item['info_name'],
-                'type' => $item['client_type_name'],
-                'parent' => $item['parent_id'],
-                'created' => $item['client_created'],
-                'image' => fileToURL($item['client_type_image_path'], "public/images/unidades/"),
-            ];
-        }, $result);
-        return $this->successResponse(INFO_SUCCESS, $payload);
+        // $payload = array_map(function ($item) {
+        //     return [
+        //         'id' => $item['client_id'],
+        //         'name' => $item['info_name'],
+        //         'type' => $item['client_type_name'],
+        //         'parent' => $item['parent_id'],
+        //         'created' => $item['client_created'],
+        //         'image' => fileToURL($item['client_type_image_path'], "public/images/unidades/"),
+        //     ];
+        // }, $result);
+        return $this->successResponse(INFO_SUCCESS, $result);
     }
 
     public function getLogosInspectables(int $id_client)
