@@ -59,7 +59,7 @@ function fileToURL(string $path): string
     $publicIndex = array_search('public', $fileParts);
 
     $pathAfterPublic = implode('/', array_slice($fileParts, $publicIndex + 1));
-    return $server . $pathAfterPublic;
+    return $server . 'public/' . $pathAfterPublic;
 }
 
 function generateJWT(array $payload, string $key): string
