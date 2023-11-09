@@ -36,8 +36,6 @@ class ClientController extends BaseController
             ->orderBy('INF.info_name', 'ASC')
             ->get();
         $result = $query->getResultArray();
-        var_dump($result);
-        die;
         $payload = array_map(function ($item) {
             return [
                 'id' => $item['client_id'],
@@ -45,7 +43,7 @@ class ClientController extends BaseController
                 'type' => $item['client_type_name'],
                 'parent' => $item['parent_id'],
                 'created' => $item['client_created'],
-                'image' => fileToURL($item['client_type_image_path']),
+                'image' => $item['client_type_image_path'],
             ];
         }, $result);
         return $this->successResponse(INFO_SUCCESS, $payload);
