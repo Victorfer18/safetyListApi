@@ -31,7 +31,7 @@ function uploadFile(object $file, string $filePath)
     $destinationDirectory = getcwd() . '/uploads/' . $filePath;
     if (!is_dir($destinationDirectory)) {
         mkdir($destinationDirectory, 0755, true);
-        $sourceIndexPath = __DIR__ . '/../../writable/uploads/index.html';
+        $sourceIndexPath = __DIR__ . '/../../public/uploads/index.html';
         $destinationIndexPath = $destinationDirectory . 'index.html';
         copy($sourceIndexPath, $destinationIndexPath);
     }
