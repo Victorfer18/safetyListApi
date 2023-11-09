@@ -51,12 +51,15 @@ function removeFile(string $file)
     }
 }
 
-function fileToURL(string $file, string $path = "public/uploads/"): string
+function fileToURL(string $path): string
 {
     $server = "https://safetylist.safety2u.com.br/";
-    $basePath = $path;
-    $file = explode('/', $file)[7] . "/" . explode('/', $file)[8];
-    return $server . $basePath . $file;
+
+    $fileParts = explode('/', $path);
+    $publicIndex = array_search('public', $fileParts);
+
+    $pathAfterPublic = implode('/', array_slice($fileParts, $publicIndex + 1));
+    return $server . $pathAfterPublic;
 }
 
 function generateJWT(array $payload, string $key): string
