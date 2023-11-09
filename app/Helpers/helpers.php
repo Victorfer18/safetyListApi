@@ -51,10 +51,10 @@ function removeFile(string $file)
     }
 }
 
-function fileToURL(string $file): string
+function fileToURL(string $file, string $path = "public/uploads/"): string
 {
     $server = "https://safetylist.safety2u.com.br/";
-    $basePath = "public/uploads/";
+    $basePath = $path;
     $file = explode('/', $file)[7] . "/" . explode('/', $file)[8];
     return $server . $basePath . $file;
 }

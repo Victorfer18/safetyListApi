@@ -43,7 +43,7 @@ class ClientController extends BaseController
                 'type' => $item['client_type_name'],
                 'parent' => $item['parent_id'],
                 'created' => $item['client_created'],
-                'image' => $item['client_type_image_path'],
+                'image' => fileToURL($item['client_type_image_path'], "public/images/unidades/"),
             ];
         }, $result);
         return $this->successResponse(INFO_SUCCESS, $payload);
