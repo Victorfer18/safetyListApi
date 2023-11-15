@@ -254,11 +254,11 @@ class InspectionController extends BaseController
         $query->insert($data);
         $system_maintenance_id = $this->db->insertID();
         $data = [
-            'system_maintenance_id' => 2000,
+            'system_maintenance_id' => $system_maintenance_id,
             'maintenance_file_path' => $uploadFile,
-            'maintenance_file_created' => date('Y-m-d H:i:s'),
         ];
-        $this->db->table('maintenance_file')->insert($data);
+        $queryInserFille = $this->db->table('maintenance_file');
+        $queryInserFille->insert($data);
         return $this->successResponse(INFO_SUCCESS);
     }
 
