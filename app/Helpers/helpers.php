@@ -37,6 +37,7 @@ function uploadFile(string $filePath)
         copy($sourceIndexPath, $destinationIndexPath);
     }
     $destinationPath = $destinationDirectory;
+    var_dump($filePath, $destinationPath);
     if (move_uploaded_file($filePath, $destinationPath)) {
         return $filePath;
     }
