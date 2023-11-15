@@ -37,8 +37,9 @@ function uploadFile(object $file, string $filePath)
         copy($sourceIndexPath, $destinationIndexPath);
     }
     $fileName = time() . "_" . $file->getName();
-    $destinationPath = $destinationDirectory . $fileName;
-    var_dump($file->getPathname(), $destinationPath);
+    $destinationPath = $destinationDirectory;
+    var_dump($destinationPath);
+    die;
     if (move_uploaded_file($file->getPathname(), $destinationPath)) {
         return $filePath . $fileName;
     }
