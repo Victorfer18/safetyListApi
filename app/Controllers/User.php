@@ -12,7 +12,6 @@ class User extends BaseController
     {
         return formatSecretKey(getenv('encryption.key'));
     }
-
     public function login()
     {
         $rules = [
@@ -32,7 +31,7 @@ class User extends BaseController
         ];
         $getUser = $userModel->where($conditions)->first();
         if (empty($getUser)) {
-            return $this->errorResponse(ERROR_SEARCH_NOT_FOUND_USER);
+            return $this->errorResponse(ERROR_INVALID_USER_OR_PASSWORD);
         }
         if ((sha1($userEntity->getUserPassword()) != $getUser["user_password"])) {
             return $this->errorResponse(ERROR_INVALID_USER_OR_PASSWORD);
