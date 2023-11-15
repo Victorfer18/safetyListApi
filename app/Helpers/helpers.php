@@ -27,19 +27,21 @@ define('ERROR_ACCOUNT_INACTIVE', 'Sua conta está inativa. Entre em contato com 
 
 
 
-function uploadFile(string $filePath)
+function uploadFile($file, string $filePath)
 {
-    $destinationDirectory = getcwd() . '/uploads/';
+    $destinationDirectory = getcwd() . '/uploads/' . $filePath;
     if (!is_dir($destinationDirectory)) {
         mkdir($destinationDirectory, 0755, true);
         $sourceIndexPath = __DIR__ . '/../../public/uploads/index.html';
         $destinationIndexPath = $destinationDirectory . 'index.html';
         copy($sourceIndexPath, $destinationIndexPath);
     }
-    $destinationPath = $destinationDirectory;
-    var_dump($filePath, $destinationPath);
-    if (move_uploaded_file($filePath, $destinationPath)) {
-        return $filePath;
+    $fileName = time() . "_" . $file->getName();
+    $destinationPath = $destinationDirectory . $fileName;
+    var_dump($file->getPathname());
+
+    if (move_uploaded_file($file->getPathname(), $destinationPath)) {
+        return $filePath . $fileName;
     }
     return false;
 }
