@@ -257,6 +257,7 @@ class InspectionController extends BaseController
         $this->db->table('maintenance_file')->insert([
             'system_maintenance_id' => $system_maintenance_id,
             'maintenance_file_path' => $uploadFile,
+            'is_according' => $consistency_status ? 1 : 0
         ]);
 
         return $this->successResponse(INFO_SUCCESS);
