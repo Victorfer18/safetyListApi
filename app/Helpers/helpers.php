@@ -24,6 +24,7 @@ define('WARNING_PASSWORD_WEAK', 'A senha é fraca. Use uma combinação de letra
 define('CONFIRM_DELETE_USER', 'Tem certeza de que deseja excluir este usuário? Esta ação não pode ser desfeita.');
 define('ERROR_INVALID_USER_OR_PASSWORD', 'Usuário ou senha inválidos.');
 define('ERROR_ACCOUNT_INACTIVE', 'Sua conta está inativa. Entre em contato com o suporte para obter assistência.');
+define('ERROR', 'Algo deu errado. Entre em contato com o suporte para obter assistência.');
 
 
 
