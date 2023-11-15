@@ -253,9 +253,8 @@ class InspectionController extends BaseController
         }
         $query->insert($data);
         $system_maintenance_id = $this->db->insertID();
-        $faker = \Faker\Factory::create();
         $data = [
-            'system_maintenance_id' => $faker->uuid(),
+            'system_maintenance_id' => 2000,
             'maintenance_file_path' => $uploadFile,
             'maintenance_file_created' => date('Y-m-d H:i:s'),
         ];
