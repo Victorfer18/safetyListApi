@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\UserModel;
 
 require APPPATH . 'Helpers/helpers.php';
 
@@ -33,12 +32,12 @@ class User extends BaseController
         ];
         $getUser = $userModel->where($conditions)->first();
         if (empty($getUser)) {
-            return $this->errorResponse(ERROR_SEARCH_NOT_FOUND);
+            return $this->errorResponse(ERROR_SEARCH_NOT_FOUND_USER);
         }
         if ((sha1($userEntity->getUserPassword()) != $getUser["user_password"])) {
             return $this->errorResponse(ERROR_INVALID_USER_OR_PASSWORD);
         }
-        if ($getUser["situation_id"] != 0) {
+        if ($getUser["situation_id"] == 0) {
             return $this->errorResponse(ERROR_ACCOUNT_INACTIVE);
         }
         $token = generateJWT(["user_id" => $getUser["user_id"], "client_id" => $getUser["client_id"]], self::SECRET_KEY());
