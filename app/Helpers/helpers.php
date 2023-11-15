@@ -40,8 +40,6 @@ function uploadFile(object $file, string $filePath)
         }
         $fileName = time() . "_" . $file->getName();
         $destinationPath = $destinationDirectory . $fileName;
-        var_dump($destinationPath);
-
         if (move_uploaded_file($file->getPathname(), $destinationPath)) {
             return $filePath . $fileName;
         }
