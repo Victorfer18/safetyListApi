@@ -285,19 +285,31 @@ class InspectionController extends BaseController
 
         $maintenanceTypes = [];
 
-        $faker = \Faker\Factory::create();
         foreach ($results as $result) {
-            $modifiedResults = [];
-            for ($count = 1; $count <= ($result->qtd_total ?? 1); $count++) {
-                $maintenanceType = [
-                    'id' => $faker->uuid(),
-                    'maintenance_type_id' => $result->maintenance_type_id,
-                    'maintenance_type_name' => $count . ' - ' . $result->maintenance_type_name,
-                ];
-                $modifiedResults[] = $maintenanceType;
+            $maintenanceType = [
+                'maintenance_type_id' => $result->maintenance_type_id,
+                'maintenance_type_name' => $result->maintenance_type_name,
+            ];
+            if ($result->qtd_total !== null && $result->qtd_total > 0) {
+                $modifiedResults = [];
+                for ($count = 1; $count <= $result->qtd_total; $count++) {
+                    $maintenanceType['maintenance_type_name'] = $count . ' - ' . $result->maintenance_type_name;
+                    $modifiedResults[] = $maintenanceType;
+                }
+                $maintenanceTypes = array_merge($maintenanceTypes, $modifiedResults);
+            } else {
+                $maintenanceTypes[] = $maintenanceType;
             }
-            $maintenanceTypes = array_merge($maintenanceTypes, $modifiedResults);
         }
+
+        $faker = \Faker\Factory::create();
+        $maintenanceTypes = array_map(function ($item) use ($faker) {
+            return [
+                'id' => $faker->uuid(),
+                'maintenance_type_id' => $item['maintenance_type_id'],
+                'maintenance_type_name' => $item['maintenance_type_name'],
+            ];
+        }, $maintenanceTypes);
 
         return $this->successResponse(INFO_SUCCESS, $maintenanceTypes);
     }
