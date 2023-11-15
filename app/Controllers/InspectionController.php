@@ -247,19 +247,19 @@ class InspectionController extends BaseController
                 'system_maintenance_action' => $action ?? ""
             ];
         }
-        $system_maintenance_id = $this->db->insertID();
         $uploadFile = uploadFile($image, time() . "/");
         if (!$uploadFile) {
             return $this->errorResponse(ERROR);
         }
-
         $query->insert($data);
-        $this->db->table('maintenance_file')->insert([
-            'system_maintenance_id' => $system_maintenance_id,
+        $system_maintenance_id = $this->db->insertID();
+        $faker = \Faker\Factory::create();
+        $data = [
+            'system_maintenance_id' => $faker->uuid(),
             'maintenance_file_path' => $uploadFile,
-            'is_according' => $consistency_status ? 1 : 0
-        ]);
-
+            'maintenance_file_created' => date('Y-m-d H:i:s'),
+        ];
+        $this->db->table('maintenance_file')->insert($data);
         return $this->successResponse(INFO_SUCCESS);
     }
 
