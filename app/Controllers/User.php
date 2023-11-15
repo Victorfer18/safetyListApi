@@ -38,7 +38,7 @@ class User extends BaseController
         if ((sha1($userEntity->getUserPassword()) != $getUser["user_password"])) {
             return $this->errorResponse(ERROR_INVALID_USER_OR_PASSWORD);
         }
-        if ($getUser["situation_id"] == 0) {
+        if ($getUser["situation_id"] != 0) {
             return $this->errorResponse(ERROR_ACCOUNT_INACTIVE);
         }
         $token = generateJWT(["user_id" => $getUser["user_id"], "client_id" => $getUser["client_id"]], self::SECRET_KEY());
