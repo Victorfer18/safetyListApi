@@ -386,7 +386,6 @@ class InspectionController extends BaseController
             },
             $results
         );
-
         return $this->successResponse(INFO_SUCCESS, $results);
     }
 }
