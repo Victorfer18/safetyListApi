@@ -174,7 +174,7 @@ class InspectionController extends BaseController
         $rules = [
             'system_type_id' => 'required|numeric|is_natural_no_zero',
             'maintenance_type_id' => 'required|numeric|is_natural_no_zero',
-            'consistency_status' => 'required|in_list[true, false]',
+            'consistency_status' => 'required|in_list[1, 0]',
             'observation' => 'required',
             'client_parent' => 'required|numeric',
             'image' => 'uploaded[image]|mime_in[image,image/jpg,image/jpeg,image/png]'
