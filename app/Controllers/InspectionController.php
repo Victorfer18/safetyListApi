@@ -236,7 +236,7 @@ class InspectionController extends BaseController
             'maintenance_type_id' => $maintenance_type_id
         ];
 
-        if (!$consistency_status) {
+        if ($consistency_status == 0) {
             $query = $this->db->table('system_maintenance');
             $data = [
                 'system_maintenance_text' => $observation,
