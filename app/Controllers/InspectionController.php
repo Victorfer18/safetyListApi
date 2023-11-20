@@ -192,7 +192,7 @@ class InspectionController extends BaseController
         $observation = $this->request->getVar('observation');
         $action = $this->request->getVar('action');
         $image = $this->request->getFile('image');
-        if (!$consistency_status) {
+        if (intval($consistency_status) == 0) {
             if (!$this->validate(['action' => 'required'])) {
                 return $this->validationErrorResponse();
             }
@@ -226,33 +226,37 @@ class InspectionController extends BaseController
             return $this->errorResponse(ERROR_SEARCH_NOT_FOUND);
         }
         $system_id = $system_id[0]["system_id"];
-
-        $query = $this->db->table('system_maintenance_according');
-        $data = [
-            'system_maintenance_according_text' => $observation,
-            'system_maintenance_according_created' => date('Y-m-d H:i:s'),
-            'user_id' => $user_id,
-            'system_id' => $system_id,
-            'maintenance_type_id' => $maintenance_type_id
-        ];
-
-        if ($consistency_status == 0) {
-            $query = $this->db->table('system_maintenance');
-            $data = [
-                'system_maintenance_text' => $observation,
-                'system_maintenance_created' => date('Y-m-d H:i:s'),
-                'system_maintenance_expiration' => date('Y-m-d', strtotime('+30 days')),
-                'user_id' => $user_id,
-                'system_id' => $system_id,
-                'maintenance_type_id' => $maintenance_type_id,
-                'system_maintenance_action' => $action ?? ""
-            ];
+        switch (intval($consistency_status)) {
+            case 1:
+                $systemData = $this->db->table('system_maintenance_according');
+                $data = [
+                    'system_maintenance_according_text' => $observation,
+                    'system_maintenance_according_created' => date('Y-m-d H:i:s'),
+                    'user_id' => $user_id,
+                    'system_id' => $system_id,
+                    'maintenance_type_id' => $maintenance_type_id
+                ];
+                break;
+            case 0:
+                $systemData = $this->db->table('system_maintenance');
+                $data = [
+                    'system_maintenance_text' => $observation,
+                    'system_maintenance_created' => date('Y-m-d H:i:s'),
+                    'system_maintenance_expiration' => date('Y-m-d', strtotime('+30 days')),
+                    'user_id' => $user_id,
+                    'system_id' => $system_id,
+                    'maintenance_type_id' => $maintenance_type_id,
+                    'system_maintenance_action' => $action
+                ];
+                break;
+            default:
+                break;
         }
         $uploadFile = uploadFile($image, time() . "/");
         if (!$uploadFile) {
             return $this->errorResponse(ERROR);
         }
-        $query->insert($data);
+        $systemData->insert($data);
         $system_maintenance_id = $this->db->insertID();
         $dataFile = [
             'system_maintenance_id' => $system_maintenance_id,
@@ -265,8 +269,6 @@ class InspectionController extends BaseController
         ];
         $queryInsertFile = $this->db->table('maintenance_file');
         $existFille = $queryInsertFile->where($conditions)->get()->getResultArray();
-        // var_dump($conditions);
-        // die;
         if (empty($existFille)) {
             $queryInsertFile->insert($dataFile);
         } else {
