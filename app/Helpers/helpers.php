@@ -30,6 +30,8 @@ define('ERROR', 'Algo deu errado. Entre em contato com o suporte para obter assi
 
 function uploadFile(object $file, string $filePath)
 {
+    var_dump($file->getPathname());
+    die;
     if ($file !== null && $file instanceof \CodeIgniter\HTTP\Files\UploadedFile) {
         $destinationDirectory = getcwd() . '/uploads/' . $filePath;
         if (!is_dir($destinationDirectory)) {

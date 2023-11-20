@@ -249,6 +249,7 @@ class InspectionController extends BaseController
             ];
         }
         $uploadFile = uploadFile($image, time() . "/");
+        die;
         if (!$uploadFile) {
             return $this->errorResponse(ERROR);
         }
