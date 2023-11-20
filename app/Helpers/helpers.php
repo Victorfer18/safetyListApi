@@ -38,7 +38,7 @@ function uploadFile(object $file, string $filePath)
             $destinationIndexPath = $destinationDirectory . 'index.html';
             copy($sourceIndexPath, $destinationIndexPath);
         }
-        $fileName = uniqid() . "_" . "." . $file->getExtension();
+        $fileName = uniqid() . "." . $file->getExtension();
         $destinationPath = $destinationDirectory . $fileName;
         if (move_uploaded_file($file->getPathname(), $destinationPath)) {
             return $filePath . $fileName;
