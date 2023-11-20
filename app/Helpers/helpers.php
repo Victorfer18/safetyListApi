@@ -30,8 +30,6 @@ define('ERROR', 'Algo deu errado. Entre em contato com o suporte para obter assi
 
 function uploadFile(object $file, string $filePath)
 {
-    var_dump($file->getPathname());
-    die;
     if ($file !== null && $file instanceof \CodeIgniter\HTTP\Files\UploadedFile) {
         $destinationDirectory = getcwd() . '/uploads/' . $filePath;
         if (!is_dir($destinationDirectory)) {
@@ -40,7 +38,7 @@ function uploadFile(object $file, string $filePath)
             $destinationIndexPath = $destinationDirectory . 'index.html';
             copy($sourceIndexPath, $destinationIndexPath);
         }
-        $fileName = time() . "_" . $file->getName();
+        $fileName = uniqid() . "_" . "." . $file->getExtension();
         $destinationPath = $destinationDirectory . $fileName;
         if (move_uploaded_file($file->getPathname(), $destinationPath)) {
             return $filePath . $fileName;

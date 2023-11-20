@@ -248,8 +248,7 @@ class InspectionController extends BaseController
                 'system_maintenance_action' => $action ?? ""
             ];
         }
-        $uploadFile = uploadFile($image, time() . "/");
-        die;
+        $uploadFile = uploadFile($image, uniqid() . "/");
         if (!$uploadFile) {
             return $this->errorResponse(ERROR);
         }
