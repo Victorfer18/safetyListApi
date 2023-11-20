@@ -56,7 +56,7 @@ function removeFile(string $file)
     }
 }
 
-function fileToURL(string $file, string $subFolder): string
+function fileToURL(string $file, string $subFolder = ""): string
 {
     $server = "https://safetylist.safety2u.com.br/public" . $subFolder . "/";
     $publicPos = strpos($file, "/public/");
