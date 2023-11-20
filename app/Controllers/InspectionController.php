@@ -308,7 +308,10 @@ class InspectionController extends BaseController
                 }
                 $maintenanceTypes = array_merge($maintenanceTypes, $modifiedResults);
             } else {
-                $maintenanceTypes[] = $maintenanceType;
+                $maintenanceTypes[] = [
+                    'maintenance_type_id' => $result->maintenance_type_id,
+                    'maintenance_type_name' => 1  . ' - ' .  $result->maintenance_type_name,
+                ];
             }
         }
 
@@ -377,7 +380,7 @@ class InspectionController extends BaseController
                     'maintenance_type_id' => intval($item['n_maintenance_type_id'] ?? $item['m_maintenance_type_id']),
                     'maintenance_type_name' => $counter++ . ' - ' . $item['maintenance_type_name'],
                     'file_id' => intval($item['maintenance_file_id']),
-                    'file_url' => fileToURL($item['maintenance_file_path']),
+                    'file_url' => fileToURL($item['maintenance_file_path'], "uploads"),
                     'is_according' => intval($item['is_according']),
                 ];
             },
