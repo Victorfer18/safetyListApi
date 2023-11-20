@@ -257,6 +257,7 @@ class InspectionController extends BaseController
         $dataFile = [
             'system_maintenance_id' => $system_maintenance_id,
             'maintenance_file_path' => $uploadFile,
+            'is_according' => $consistency_status
         ];
 
         $queryInsertFile = $this->db->table('maintenance_file');
