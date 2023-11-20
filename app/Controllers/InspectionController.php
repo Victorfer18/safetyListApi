@@ -264,8 +264,10 @@ class InspectionController extends BaseController
             'is_according' => $consistency_status
         ];
         $queryInsertFile = $this->db->table('maintenance_file');
-        $queryInsertFile->where($conditions)->get()->getResultArray();
-        if (empty($queryInsertFile)) {
+        $existFille = $queryInsertFile->where($conditions)->get()->getResultArray();
+        // var_dump($conditions);
+        // die;
+        if (empty($existFille)) {
             $queryInsertFile->insert($dataFile);
         } else {
             $queryInsertFile->set($dataFile)->where($conditions)->update();
