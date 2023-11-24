@@ -252,28 +252,28 @@ class InspectionController extends BaseController
             default:
                 break;
         }
-        // $uploadFile = uploadFile($image, time() . "/");
-        // if (!$uploadFile) {
-        //     return $this->errorResponse(ERROR);
-        // }
-        // $systemData->insert($data);
-        // $system_maintenance_id = $this->db->insertID();
-        // $dataFile = [
-        //     'system_maintenance_id' => $system_maintenance_id,
-        //     'maintenance_file_path' => $uploadFile,
-        //     'is_according' => $consistency_status
-        // ];
-        // $conditions = [
-        //     'system_maintenance_id' => $system_maintenance_id,
-        //     'is_according' => $consistency_status
-        // ];
-        // $queryInsertFile = $this->db->table('maintenance_file');
-        // $existFille = $queryInsertFile->where($conditions)->get()->getResultArray();
-        // if (empty($existFille)) {
-        //     $queryInsertFile->insert($dataFile);
-        // } else {
-        //     $queryInsertFile->set($dataFile)->where($conditions)->update();
-        // }
+        $uploadFile = uploadFile($image, time() . "/");
+        if (!$uploadFile) {
+            return $this->errorResponse(ERROR);
+        }
+        $systemData->insert($data);
+        $system_maintenance_id = $this->db->insertID();
+        $dataFile = [
+            'system_maintenance_id' => $system_maintenance_id,
+            'maintenance_file_path' => $uploadFile,
+            'is_according' => $consistency_status
+        ];
+        $conditions = [
+            'system_maintenance_id' => $system_maintenance_id,
+            'is_according' => $consistency_status
+        ];
+        $queryInsertFile = $this->db->table('maintenance_file');
+        $existFille = $queryInsertFile->where($conditions)->get()->getResultArray();
+        if (empty($existFille)) {
+            $queryInsertFile->insert($dataFile);
+        } else {
+            $queryInsertFile->set($dataFile)->where($conditions)->update();
+        }
 
         return $this->successResponse(INFO_SUCCESS);
     }
