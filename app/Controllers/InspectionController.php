@@ -114,11 +114,11 @@ class InspectionController extends BaseController
         return $this->successResponse(INFO_SUCCESS);
     }
 
-    public function getInspectableList()
+    public function getInspecTableList()
     {
         $rules = [
             'inspection_id' => 'required|numeric|is_natural_no_zero',
-            'client_id' => 'required|numeric|is_natural_no_zero',
+            'client_parent' => 'required|numeric|is_natural_no_zero',
         ];
         if (!$this->validate($rules)) {
             return $this->validationErrorResponse();
