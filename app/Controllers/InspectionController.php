@@ -90,12 +90,12 @@ class InspectionController extends BaseController
         }
 
         $inspection_id = $this->request->getVar('inspection_id');
-        $client_id = $this->request->getVar('client_id');
+        $client_parent = $this->request->getVar('client_parent');
         $system_type_id = $this->request->getVar('system_type_id');
 
         $fields = [
             'inspection_id' => $inspection_id,
-            'client_id' => $client_id,
+            'client_id' => $client_parent,
             'system_type_id' => $system_type_id,
         ];
         $query = $this->db->table('sys_inspection');
