@@ -294,6 +294,8 @@ class InspectionController extends BaseController
 
         $query = $this->db->query('CALL sp_getMaintenanceType(?, ?)', array($system_type_id, $client_id));
         $results = $query->getResult();
+        var_dump($results);
+        die;
         if (!$results) {
             return $this->errorResponse(ERROR_SEARCH_NOT_FOUND);
         }
