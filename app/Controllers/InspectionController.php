@@ -292,19 +292,8 @@ class InspectionController extends BaseController
         $system_type_id = $this->request->getVar('system_type_id');
         $client_id = $this->request->getVar('client_id');
 
-        $db = $this->db->conn_id;
-
-        // Prepare the procedure call
-        $stmt = $db->prepare("CALL sp_getMaintenanceType(?, ?)");
-
-        // Bind parameters
-        $stmt->bind_param("ii", $system_type_id, $client_id);
-
-        // Execute the procedure
-        $stmt->execute();
-
-        // Fetch the results
-        $results = $stmt->get_result();
+        $query = $this->db->query('CALL sp_getMaintenanceType(?, ?)', array($system_type_id, $client_id));
+        $results = $query->getResult();
         if (!$results) {
             return $this->errorResponse(ERROR_SEARCH_NOT_FOUND);
         }
