@@ -228,7 +228,8 @@ class InspectionController extends BaseController
         $system_id = $system_id[0]["system_id"];
         switch (intval($consistency_status)) {
             case 1:
-                $systemData = $this->db->table('system_maintenance_according');
+                $typeTableSystem = 'system_maintenance_according';
+                $typeTableFille = 'maintenance_file_according';
                 $data = [
                     'system_maintenance_according_text' => $observation,
                     'system_maintenance_according_created' => date('Y-m-d H:i:s'),
@@ -238,7 +239,8 @@ class InspectionController extends BaseController
                 ];
                 break;
             case 0:
-                $systemData = $this->db->table('system_maintenance');
+                $typeTableSystem = 'system_maintenance';
+                $typeTableFille = 'maintenance_file';
                 $data = [
                     'system_maintenance_text' => $observation,
                     'system_maintenance_created' => date('Y-m-d H:i:s'),
@@ -256,25 +258,23 @@ class InspectionController extends BaseController
         if (!$uploadFile) {
             return $this->errorResponse(ERROR);
         }
+        $systemData = $this->db->table($typeTableSystem);
         $systemData->insert($data);
         $system_maintenance_id = $this->db->insertID();
         $dataFile = [
             'system_maintenance_id' => $system_maintenance_id,
             'maintenance_file_path' => $uploadFile,
-            'is_according' => $consistency_status
         ];
         $conditions = [
             'system_maintenance_id' => $system_maintenance_id,
-            'is_according' => $consistency_status
         ];
-        $queryInsertFile = $this->db->table('maintenance_file');
+        $queryInsertFile = $this->db->table($typeTableFille);
         $existFille = $queryInsertFile->where($conditions)->get()->getResultArray();
         if (empty($existFille)) {
             $queryInsertFile->insert($dataFile);
         } else {
             $queryInsertFile->set($dataFile)->where($conditions)->update();
         }
-
         return $this->successResponse(INFO_SUCCESS);
     }
 
@@ -357,7 +357,7 @@ class InspectionController extends BaseController
         $query1 = $this->db->table('system_maintenance_according n')
             ->select('n.system_maintenance_according_id as n_maintenance_id, n.user_id as n_user_id, n.system_id as n_system_id, n.maintenance_type_id as n_maintenance_type_id, n.system_maintenance_according_text as system_maintenance_according_text, 
             n.system_maintenance_according_created as system_maintenance_according_created,  inspection_id as system_maintenance_action, mt.maintenance_type_name, f.*')
-            ->join('maintenance_file f', 'n.system_maintenance_according_id = f.system_maintenance_id')
+            ->join('maintenance_file_according f', 'n.system_maintenance_according_id = f.system_maintenance_according_id')
             ->join('maintenance_type mt', 'n.maintenance_type_id = mt.maintenance_type_id', 'left')
             ->where('n.user_id', $user_id)
             ->where('n.system_id', $system_id);
@@ -395,7 +395,6 @@ class InspectionController extends BaseController
                     'maintenance_type_name' => $counter++ . ' - ' . $item['maintenance_type_name'],
                     'file_id' => intval($item['maintenance_file_id']),
                     'file_url' => fileToURL($item['maintenance_file_path'], "/uploads"),
-                    'is_according' => intval($item['is_according']),
                 ];
             },
             $results
