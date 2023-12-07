@@ -229,7 +229,9 @@ class InspectionController extends BaseController
             return $this->errorResponse(ERROR_SEARCH_NOT_FOUND);
         }
         $system_id = $system_id[0]["system_id"];
-        switch (intval($consistency_status)) {
+        $consistency_status = intval($consistency_status);
+
+        switch ($consistency_status) {
             case 1:
                 $typeTableSystem = 'system_maintenance_according';
                 $typeTableFille = 'maintenance_file_according';
@@ -273,6 +275,12 @@ class InspectionController extends BaseController
         $conditions = [
             'system_maintenance_id' => $system_maintenance_id,
         ];
+        if ($consistency_status === 1) {
+            $dataFile['system_maintenance_according_id'] = $dataFile['system_maintenance_id'];
+            unset($dataFile['system_maintenance_id']);
+            $conditions['system_maintenance_according_id'] = $conditions['system_maintenance_id'];
+            unset($conditions['system_maintenance_id']);
+        }
         $queryInsertFile = $this->db->table($typeTableFille);
         $existFille = $queryInsertFile->where($conditions)->get()->getResultArray();
         if (empty($existFille)) {
@@ -313,12 +321,10 @@ class InspectionController extends BaseController
         return $this->successResponse(INFO_SUCCESS, $maintenanceTypes);
     }
 
-
     public function getMaintenance()
     {
         $validation = $this->validate([
             'system_id' => 'required|numeric|is_natural_no_zero',
-
         ]);
 
         if ($validation === false) {
@@ -348,13 +354,6 @@ class InspectionController extends BaseController
         $faker = \Faker\Factory::create();
         $results = array_map(
             function ($item) use ($faker) {
-                static $counter = 1;
-                static $prevMaintenanceTypeId = null;
-                if (intval($item['n_maintenance_type_id'] ?? $item['m_maintenance_type_id']) != $prevMaintenanceTypeId) {
-                    $counter = 1;
-                }
-                $prevMaintenanceTypeId = intval($item['n_maintenance_type_id'] ?? $item['m_maintenance_type_id']);
-
                 return [
                     'id' => $faker->uuid(),
                     'maintenance_id' => intval($item['n_maintenance_id'] ?? $item['m_maintenance_id']),
@@ -364,7 +363,7 @@ class InspectionController extends BaseController
                     'user_id' => intval($item['n_user_id'] ?? $item['m_user_id']),
                     'system_id' => intval($item['n_system_id'] ?? $item['m_system_id']),
                     'maintenance_type_id' => intval($item['n_maintenance_type_id'] ?? $item['m_maintenance_type_id']),
-                    'maintenance_type_name' => $counter++ . ' - ' . $item['maintenance_type_name'],
+                    'maintenance_type_name' => $item['maintenance_type_name'],
                     'file_id' => intval($item['maintenance_file_id']),
                     'file_url' => fileToURL($item['maintenance_file_path'], "/uploads"),
                 ];
