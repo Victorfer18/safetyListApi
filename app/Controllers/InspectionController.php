@@ -195,7 +195,7 @@ class InspectionController extends BaseController
         $observation = $this->request->getVar('observation');
         $action = $this->request->getVar('action');
         $image = $this->request->getFile('image');
-        if (intval($consistency_status) == 0) {
+        if (intval($consistency_status) == 1) {
             if (!$this->validate(['action' => 'required'])) {
                 return $this->validationErrorResponse();
             }
@@ -275,7 +275,7 @@ class InspectionController extends BaseController
         $conditions = [
             'system_maintenance_id' => $system_maintenance_id,
         ];
-        if ($consistency_status === 1) {
+        if ($consistency_status === 0) {
             $dataFile['system_maintenance_according_id'] = $dataFile['system_maintenance_id'];
             unset($dataFile['system_maintenance_id']);
             $conditions['system_maintenance_according_id'] = $conditions['system_maintenance_id'];
