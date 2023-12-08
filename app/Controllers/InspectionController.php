@@ -334,7 +334,7 @@ class InspectionController extends BaseController
         $system_id = $this->request->getVar('system_id');
         $query1 = $this->db->table('system_maintenance_according n')
             ->select('n.system_maintenance_according_id as n_maintenance_id, n.user_id as n_user_id, n.system_id as n_system_id, n.maintenance_type_id as n_maintenance_type_id, n.system_maintenance_according_text as system_maintenance_according_text, 
-            n.system_maintenance_according_created as system_maintenance_according_created,  inspection_id as system_maintenance_action, mt.maintenance_type_name, f.*')
+            n.system_maintenance_according_created as system_maintenance_according_created,  inspection_id as system_maintenance_action, mt.maintenance_type_name, mt.maintenance_index f.*')
             ->join('maintenance_file_according f', 'n.system_maintenance_according_id = f.system_maintenance_according_id')
             ->join('maintenance_type mt', 'n.maintenance_type_id = mt.maintenance_type_id', 'left')
             ->where('n.user_id', $user_id)
@@ -342,7 +342,7 @@ class InspectionController extends BaseController
 
         $query2 = $this->db->table('system_maintenance m')
             ->select('m.system_maintenance_id as m_maintenance_id, m.user_id as m_user_id, m.system_id as m_system_id, m.maintenance_type_id as m_maintenance_type_id, m.system_maintenance_text as system_maintenance_text, 
-            m.system_maintenance_created as system_maintenance_created, m.system_maintenance_action as system_maintenance_action, mt.maintenance_type_name,
+            m.system_maintenance_created as system_maintenance_created, m.system_maintenance_action as system_maintenance_action, mt.maintenance_type_name, mt.maintenance_index,
              f.*')
             ->join('maintenance_file f', 'm.system_maintenance_id = f.system_maintenance_id')
             ->join('maintenance_type mt', 'm.maintenance_type_id = mt.maintenance_type_id', 'left')
@@ -364,6 +364,7 @@ class InspectionController extends BaseController
                     'system_id' => intval($item['n_system_id'] ?? $item['m_system_id']),
                     'maintenance_type_id' => intval($item['n_maintenance_type_id'] ?? $item['m_maintenance_type_id']),
                     'maintenance_type_name' => $item['maintenance_type_name'],
+                    'maintenance_index' => intval($item['maintenance_index']),
                     'file_id' => intval($item['maintenance_file_id']),
                     'file_url' => fileToURL($item['maintenance_file_path'], "/uploads"),
                 ];
