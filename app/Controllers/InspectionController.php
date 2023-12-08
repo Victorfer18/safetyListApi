@@ -232,7 +232,7 @@ class InspectionController extends BaseController
         $consistency_status = intval($consistency_status);
 
         switch ($consistency_status) {
-            case 1:
+            case 0:
                 $typeTableSystem = 'system_maintenance_according';
                 $typeTableFille = 'maintenance_file_according';
                 $data = [
@@ -244,7 +244,7 @@ class InspectionController extends BaseController
                     'inspection_id' => $inspection_id,
                 ];
                 break;
-            case 0:
+            case 1:
                 $typeTableSystem = 'system_maintenance';
                 $typeTableFille = 'maintenance_file';
                 $data = [
