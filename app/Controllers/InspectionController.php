@@ -334,7 +334,7 @@ class InspectionController extends BaseController
         $system_id = $this->request->getVar('system_id');
         $query1 = $this->db->table('system_maintenance_according n')
             ->select('n.system_maintenance_according_id as n_maintenance_id, n.user_id as n_user_id, n.system_id as n_system_id, n.maintenance_type_id as n_maintenance_type_id, n.system_maintenance_according_text as system_maintenance_according_text, 
-            n.system_maintenance_according_created as system_maintenance_according_created,  inspection_id as system_maintenance_action, mt.maintenance_type_name, mt.maintenance_index f.*')
+            n.system_maintenance_according_created as system_maintenance_according_created,  inspection_id as system_maintenance_action, mt.maintenance_type_name, mt.maintenance_index, f.*')
             ->join('maintenance_file_according f', 'n.system_maintenance_according_id = f.system_maintenance_according_id')
             ->join('maintenance_type mt', 'n.maintenance_type_id = mt.maintenance_type_id', 'left')
             ->where('n.user_id', $user_id)
