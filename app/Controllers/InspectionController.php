@@ -160,8 +160,6 @@ class InspectionController extends BaseController
                 "system_type_icon" => "https://safety2u.com.br/painelhomolog/assets/img/" . $item["system_type_icon"],
                 "system_group_id" => intval($item["system_group_id"]),
                 "system_group_name" => $item["system_group_name"],
-                "is_closed" => intval($item["is_closed"]),
-                "inspection_id" => intval($item["inspection_id"])
             ];
         }, $inspectables);
 
