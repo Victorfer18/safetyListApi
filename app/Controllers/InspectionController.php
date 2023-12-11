@@ -118,13 +118,11 @@ class InspectionController extends BaseController
     public function getInspecTableList()
     {
         $rules = [
-            'inspection_id' => 'required|numeric|is_natural_no_zero',
             'client_id' => 'required|numeric|is_natural_no_zero',
         ];
         if (!$this->validate($rules)) {
             return $this->validationErrorResponse();
         }
-        $inspection_id = $this->request->getVar('inspection_id');
         $client_id = $this->request->getVar('client_id');
         $client_id = intval($client_id);
         $query = $this->db->table('client CLI')
