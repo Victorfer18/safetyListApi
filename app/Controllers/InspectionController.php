@@ -141,7 +141,7 @@ class InspectionController extends BaseController
             ->join('client CLI', 'CLI.client_id = SYS.client_id')
             ->join('system_type TYP', 'SYS.system_type_id = TYP.system_type_id')
             ->join('system_group GRP', 'GRP.system_group_id = TYP.system_group_id')
-            ->join('sys_inspection SYSP', 'SYSP.system_type_id = SYS.system_type_id and SYSP.client_id = CLI.client_parent')
+            ->join('sys_inspection SYSP', ' SYSP.client_id = CLI.client_parent')
             ->whereIn('SYS.client_id', $clientIds)
             ->where('SYSP.inspection_id', $inspection_id)
             ->where('SYS.situation_id', 1)
