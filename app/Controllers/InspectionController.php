@@ -144,6 +144,7 @@ class InspectionController extends BaseController
             ->whereIn('SYS.client_id', $clientIds)
             ->where('SYS.situation_id', 1)
             ->where('TYP.situation_id', 1)
+            ->where('TYP.is_safetyList', 1)
             ->get();
 
         $inspectables = $query->getResultArray();
