@@ -134,6 +134,7 @@ class InspectionController extends BaseController
         $clientIds = $query->getResultArray();
 
         $clientIds = array_column($clientIds, 'client_id');
+
         $query = $this->db->table('sys SYS')
             ->select('SYS.system_id, SYS.client_id, CLI.client_level, CLI.client_parent, SYS.situation_id, SYS.system_type_id, TYP.system_type_name, TYP.system_type_icon, GRP.system_group_id, GRP.system_group_name, SYSP.is_closed')
             ->join('client CLI', 'CLI.client_id = SYS.client_id')
@@ -159,6 +160,8 @@ class InspectionController extends BaseController
                 "system_type_icon" => "https://safety2u.com.br/painelhomolog/assets/img/" . $item["system_type_icon"],
                 "system_group_id" => intval($item["system_group_id"]),
                 "system_group_name" => $item["system_group_name"],
+                "is_closed" => intval($item["is_closed"] ?? 0),
+
             ];
         }, $inspectables);
 
