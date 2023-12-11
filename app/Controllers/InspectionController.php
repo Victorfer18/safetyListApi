@@ -166,7 +166,8 @@ class InspectionController extends BaseController
                 "inspection_id" => intval($item["inspection_id"])
             ];
         }, $inspectables);
-
+        $inspectables = array_unique($inspectables, SORT_REGULAR);
+        $inspectables = array_values($inspectables);
         return $this->successResponse(INFO_SUCCESS, $inspectables);
     }
 
