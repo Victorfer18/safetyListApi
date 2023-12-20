@@ -394,7 +394,7 @@ class InspectionController extends BaseController
     }
     public function getSectorsByIdInspection(int $id_inspection)
     {
-        $this->db->table('inspection i')
+        $query = $this->db->table('inspection i')
             ->select([
                 'i.inspection_id',
                 'sap.sector_area_pavement_id',
@@ -411,6 +411,20 @@ class InspectionController extends BaseController
             ->join('sector_area sa', 'sap.sector_area_id = sa.sector_area_id')
             ->where('sap.situation_id', 1)
             ->where('i.inspection_id', $id_inspection)
-            ->get();
+            ->get()->getResultArray();
+
+        $sectors = array_map(function ($item) {
+            return [
+                'inspection_id' => intval($item['inspection_id']),
+                'sector_area_pavement_id' => intval($item['sector_area_pavement_id']),
+                'sector_pavement_id' => intval($item['sector_pavement_id']),
+                'sector_area_id' => intval($item['sector_area_id']),
+                'fullSectorName' => $item['fullSectorName'],
+                'is_closed' => intval($item['is_closed']),
+            ];
+        }, $query);
+        var_dump($sectors);
+        die;
+        return $this->successResponse(INFO_SUCCESS, $sectors);
     }
 }
