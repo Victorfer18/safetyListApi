@@ -423,8 +423,6 @@ class InspectionController extends BaseController
                 'is_closed' => intval($item['is_closed']),
             ];
         }, $query);
-        var_dump($sectors);
-        die;
         return $this->successResponse(INFO_SUCCESS, $sectors);
     }
 }
