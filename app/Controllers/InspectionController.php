@@ -390,7 +390,7 @@ class InspectionController extends BaseController
                         'is_closed' => 1,
                         'maintenance_id' => intval($item['maintenance_id']),
                         'observation' => $item['observation'] ?? "",
-                        'action' => $item['action'] ?? "",
+                        'action' => intval($item['action']),
                         'date_created' => $item['date_created'] ?? "",
                         'user_id' => intval($item['user_id']),
                         'system_id' => intval($item['system_id']),
