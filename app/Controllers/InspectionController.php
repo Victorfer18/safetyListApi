@@ -197,7 +197,8 @@ class InspectionController extends BaseController
             'observation' => 'required',
             'client_parent' => 'required|numeric',
             'inspection_id' => 'required|numeric',
-            'image' => 'uploaded[image]|mime_in[image,image/jpg,image/jpeg,image/png]'
+            'image' => 'uploaded[image]|mime_in[image,image/jpg,image/jpeg,image/png]',
+            'sys_app_maintenances_id' => 'required|numeric|is_natural_no_zero',
         ];
 
         if (!$this->validate($rules)) {
@@ -213,6 +214,7 @@ class InspectionController extends BaseController
         $observation = $this->request->getVar('observation');
         $action = $this->request->getVar('action');
         $image = $this->request->getFile('image');
+        $sys_app_maintenances_id = $this->request->getVar('sys_app_maintenances_id');
         if (intval($consistency_status) == 0) {
             if (!$this->validate(['action' => 'required'])) {
                 return $this->validationErrorResponse();
@@ -260,6 +262,7 @@ class InspectionController extends BaseController
                     'system_id' => $system_id,
                     'maintenance_type_id' => $maintenance_type_id,
                     'inspection_id' => $inspection_id,
+                    'sys_app_maintenances_id' => $sys_app_maintenances_id,
                 ];
                 break;
             case 0:
@@ -273,7 +276,8 @@ class InspectionController extends BaseController
                     'system_id' => $system_id,
                     'maintenance_type_id' => $maintenance_type_id,
                     'inspection_id' => $inspection_id,
-                    'system_maintenance_action' => $action
+                    'system_maintenance_action' => $action,
+                    'sys_app_maintenances_id' => $sys_app_maintenances_id,
                 ];
                 break;
             default:
