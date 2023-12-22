@@ -37,7 +37,9 @@ class InspectionController extends BaseController
             ->join('info INFO', 'INSP.client_id = INFO.client_id', 'inner')
             ->join('user USR', 'INSP.user_id = USR.user_id', 'left')
             ->whereIn('INSP.status_inspection', [1, 2])
-            ->where('INSP.client_id', $id_client);
+            ->where('INSP.client_id', $id_client)
+            ->orderBy('INSP.date_estimated', 'DESC');
+
 
         $result = $query->get()->getResultArray();
         return $this->successResponse(INFO_SUCCESS, $result);
@@ -83,7 +85,7 @@ class InspectionController extends BaseController
     {
         $rules = [
             'inspection_id' => 'required|numeric|is_natural_no_zero',
-            'client_parent' => 'required|numeric|is_natural_no_zero',
+            'client_id' => 'required|numeric|is_natural_no_zero',
             'system_type_id' => 'required|numeric|is_natural_no_zero',
         ];
 
@@ -92,27 +94,23 @@ class InspectionController extends BaseController
         }
 
         $inspection_id = $this->request->getVar('inspection_id');
-        $client_parent = $this->request->getVar('client_parent');
+        $client_id = $this->request->getVar('client_id');
         $system_type_id = $this->request->getVar('system_type_id');
 
         $fields = [
             'inspection_id' => $inspection_id,
-            'client_id' => $client_parent,
+            'client_id' => $client_id,
             'system_type_id' => $system_type_id,
+            'is_closed' => 1
         ];
         $query = $this->db->table('sys_inspection');
         $getInspectionById = $query->where($fields)->get()->getResultArray();
         if (empty($getInspectionById)) {
             $query
-                ->set('is_closed', 0)
+                ->set('is_closed', 1)
                 ->insert($fields);
             return $this->successResponse(INFO_SUCCESS);
         }
-        $query
-            ->set('is_closed', 1)
-            ->set($fields)
-            ->where($fields)
-            ->update();
         return $this->successResponse(INFO_SUCCESS);
     }
 
@@ -215,7 +213,11 @@ class InspectionController extends BaseController
         $action = $this->request->getVar('action');
         $image = $this->request->getFile('image');
         $sys_app_maintenances_id = $this->request->getVar('sys_app_maintenances_id');
-        if (intval($consistency_status) == 0) {
+
+        $status_maintenance_according = 0;
+        $status_maintenance = 1;
+
+        if (intval($consistency_status) == $status_maintenance_according) {
             if (!$this->validate(['action' => 'required'])) {
                 return $this->validationErrorResponse();
             }
@@ -234,7 +236,7 @@ class InspectionController extends BaseController
 
         $result = $query->get()->getRow();
         if (empty($result)) {
-            return $this->errorResponse(ERROR_SEARCH_NOT_FOUND);
+            return $this->errorResponse(ERROR_SEARCH_NOT_FOUND . " - " . $client_parent);
         }
         $client_parent = $result->client_id;
 
@@ -246,13 +248,13 @@ class InspectionController extends BaseController
 
         $system_id = $subquery->get()->getResultArray();
         if (empty($system_id)) {
-            return $this->errorResponse(ERROR_SEARCH_NOT_FOUND);
+            return $this->errorResponse(ERROR_SEARCH_NOT_FOUND . " - " . $maintenance_type_id . " - " . $system_type_id);
         }
         $system_id = $system_id[0]["system_id"];
         $consistency_status = intval($consistency_status);
 
         switch ($consistency_status) {
-            case 1:
+            case $status_maintenance_according:
                 $typeTableSystem = 'system_maintenance_according';
                 $typeTableFille = 'maintenance_file_according';
                 $data = [
@@ -265,7 +267,7 @@ class InspectionController extends BaseController
                     'sys_app_maintenances_id' => $sys_app_maintenances_id,
                 ];
                 break;
-            case 0:
+            case $status_maintenance:
                 $typeTableSystem = 'system_maintenance';
                 $typeTableFille = 'maintenance_file';
                 $data = [
@@ -297,7 +299,7 @@ class InspectionController extends BaseController
         $conditions = [
             'system_maintenance_id' => $system_maintenance_id,
         ];
-        if ($consistency_status === 1) {
+        if ($consistency_status === $status_maintenance_according) {
             $dataFile['system_maintenance_according_id'] = $dataFile['system_maintenance_id'];
             unset($dataFile['system_maintenance_id']);
             $conditions['system_maintenance_according_id'] = $conditions['system_maintenance_id'];
@@ -318,6 +320,7 @@ class InspectionController extends BaseController
         $rules = [
             'system_type_id' => 'required|numeric|is_natural_no_zero',
             'client_id' => 'required|numeric|is_natural_no_zero',
+            'sector_area_pavement_id' => 'required|numeric|is_natural_no_zero',
         ];
 
         if (!$this->validate($rules)) {
@@ -327,10 +330,12 @@ class InspectionController extends BaseController
         $system_type_id = $this->request->getVar('system_type_id');
         $client_id = $this->request->getVar('client_id');
         $user_id = $this->DATA_JWT->user_id;
+        $sector_area_pavement_id = $this->request->getVar('sector_area_pavement_id');
 
         $query_maintenance_type = $this->db->table('sys_app_maintenances')
             ->where('client_id', $client_id)
             ->where('system_type_id', $system_type_id)
+            ->where('sector_area_pavement_id', $sector_area_pavement_id)
             ->orderBy('maintenance_order', 'ASC')
             ->orderBy('maintenance_type_name', 'ASC')
             ->get();
@@ -387,6 +392,7 @@ class InspectionController extends BaseController
                 if ($item['sys_app_maintenances_id'] == $maintenanceType['id']) {
                     $correspondingAnswer = [
                         'sys_app_maintenances_id' => intval($item['sys_app_maintenances_id']),
+                        'is_according' => empty($item['action']) ? 0 : 1,
                         'is_closed' => 1,
                         'maintenance_id' => intval($item['maintenance_id']),
                         'observation' => $item['observation'] ?? "",
@@ -406,6 +412,7 @@ class InspectionController extends BaseController
                 $correspondingAnswer = [
                     'sys_app_maintenances_id' => intval($maintenanceType['id']),
                     'is_closed' => 0,
+                    'is_according' => 0,
                     'maintenance_id' => null,
                     'observation' => null,
                     'action' => null,
@@ -451,8 +458,8 @@ class InspectionController extends BaseController
             ->get()->getResultArray();
         $sectors = array_map(function ($item) {
             return [
-                'id' => intval($item['sector_area_pavement_id']),
                 'inspection_id' => intval($item['inspection_id']),
+                'sector_area_pavement_id' => intval($item['sector_area_pavement_id']),
                 'sector_pavement_id' => intval($item['sector_pavement_id']),
                 'sector_area_id' => intval($item['sector_area_id']),
                 'fullSectorName' => $item['fullSectorName'],
