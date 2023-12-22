@@ -388,16 +388,16 @@ class InspectionController extends BaseController
                     $correspondingAnswer = [
                         'id' => intval($item['sys_app_maintenances_id']),
                         'is_closed' => 1,
-                        'maintenance_id' => intval($item['n_maintenance_id'] ?? $item['m_maintenance_id']),
-                        'observation' => $item['system_maintenance_according_text'] ?? $item['system_maintenance_text'],
-                        'action' => $item['system_maintenance_action'] ?? "",
-                        'date_created' => $item['system_maintenance_according_created'] ?? $item['system_maintenance_created'],
-                        'user_id' => intval($item['n_user_id'] ?? $item['m_user_id']),
-                        'system_id' => intval($item['n_system_id'] ?? $item['m_system_id']),
-                        'maintenance_type_id' => intval($item['n_maintenance_type_id'] ?? $item['m_maintenance_type_id']),
-                        'maintenance_type_name' => $item['maintenance_type_name'],
-                        'file_id' => intval($item['maintenance_file_id']),
-                        'file_url' => fileToURL($item['maintenance_file_path'], "/uploads"),
+                        'maintenance_id' => intval($item['maintenance_id']),
+                        'observation' => $item['observation'] ?? "",
+                        'action' => $item['action'] ?? "",
+                        'date_created' => $item['date_created'] ?? "",
+                        'user_id' => intval($item['user_id']),
+                        'system_id' => intval($item['system_id']),
+                        'maintenance_type_id' => intval($item['maintenance_type_id']),
+                        'maintenance_type_name' => $item['maintenance_type_name'] ?? "",
+                        'file_id' => intval($item['file_id']),
+                        'file_url' => $item['file_url'] ?? "",
                     ];
                     break;
                 }
