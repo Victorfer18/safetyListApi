@@ -420,7 +420,14 @@ class InspectionController extends BaseController
             }
             $maintenanceType = $correspondingAnswer;
         }
-        return $this->successResponse(INFO_SUCCESS, $maintenanceTypes);
+        $closedCount = array_reduce($maintenanceTypes, function ($acc, $sector) {
+            return $acc + ($sector['is_closed'] === 1 ? 1 : 0);
+        }, 0);
+        $allClosed = ($closedCount === count($maintenanceTypes));
+        return $this->successResponse(INFO_SUCCESS, [
+            'allClosed' => $allClosed,
+            'maintenances' => $maintenanceTypes,
+        ]);
     }
     public function getSectorsByIdInspection(int $id_inspection)
     {
