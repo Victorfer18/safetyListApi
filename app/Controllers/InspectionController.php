@@ -386,7 +386,7 @@ class InspectionController extends BaseController
             foreach ($results as $item) {
                 if ($item['sys_app_maintenances_id'] == $maintenanceType['id']) {
                     $correspondingAnswer = [
-                        'id' => intval($item['sys_app_maintenances_id']),
+                        'sys_app_maintenances_id' => intval($item['sys_app_maintenances_id']),
                         'is_closed' => 1,
                         'maintenance_id' => intval($item['maintenance_id']),
                         'observation' => $item['observation'] ?? "",
@@ -404,7 +404,7 @@ class InspectionController extends BaseController
             }
             if (!$correspondingAnswer) {
                 $correspondingAnswer = [
-                    'id' => intval($maintenanceType['id']),
+                    'sys_app_maintenances_id' => intval($maintenanceType['id']),
                     'is_closed' => 0,
                     'maintenance_id' => null,
                     'observation' => null,
