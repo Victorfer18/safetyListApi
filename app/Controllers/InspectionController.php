@@ -81,11 +81,11 @@ class InspectionController extends BaseController
             ->update();
         return $this->successResponse(INFO_SUCCESS);
     }
-    public function saveInspectableIsClosed()
+    public function setIsClosedInspectable()
     {
         $rules = [
             'inspection_id' => 'required|numeric|is_natural_no_zero',
-            'client_id' => 'required|numeric|is_natural_no_zero',
+            'client_parent' => 'required|numeric|is_natural_no_zero',
             'system_type_id' => 'required|numeric|is_natural_no_zero',
         ];
 
@@ -94,14 +94,14 @@ class InspectionController extends BaseController
         }
 
         $inspection_id = $this->request->getVar('inspection_id');
-        $client_id = $this->request->getVar('client_id');
+        $client_parent = $this->request->getVar('client_parent');
         $system_type_id = $this->request->getVar('system_type_id');
 
         $fields = [
             'inspection_id' => $inspection_id,
-            'client_id' => $client_id,
+            'client_id' => $client_parent,
             'system_type_id' => $system_type_id,
-            'is_closed' => 1
+            'is_closed' => 0,
         ];
         $query = $this->db->table('sys_inspection');
         $getInspectionById = $query->where($fields)->get()->getResultArray();
@@ -111,6 +111,11 @@ class InspectionController extends BaseController
                 ->insert($fields);
             return $this->successResponse(INFO_SUCCESS);
         }
+        $query
+            ->set('is_closed', 1)
+            ->set($fields)
+            ->where($fields)
+            ->update();
         return $this->successResponse(INFO_SUCCESS);
     }
 
