@@ -187,8 +187,14 @@ class InspectionController extends BaseController
                 "is_closed" => intval($item["is_closed"]),
             ];
         }, $systems);
-
-        return $this->successResponse(INFO_SUCCESS, $formattedSystems);
+        $closedCount = array_reduce($formattedSystems, function ($acc, $sector) {
+            return $acc + ($sector['is_closed'] === 1 ? 1 : 0);
+        }, 0);
+        $allClosed = ($closedCount === count($formattedSystems));
+        return $this->successResponse(INFO_SUCCESS, [
+            'allClosed' => $allClosed,
+            'inspecTables' => $formattedSystems,
+        ]);
     }
 
     public function registerMaintenance()
