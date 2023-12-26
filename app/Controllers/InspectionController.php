@@ -262,7 +262,7 @@ class InspectionController extends BaseController
         $status_maintenance_according = 0;
         $status_maintenance = 1;
 
-        if (intval($consistency_status) == $status_maintenance_according) {
+        if (intval($consistency_status) == $status_maintenance) {
             if (!$this->validate(['action' => 'required'])) {
                 return $this->validationErrorResponse();
             }
