@@ -119,6 +119,33 @@ class InspectionController extends BaseController
         return $this->successResponse(INFO_SUCCESS);
     }
 
+    public function setIsClosedSectors()
+    {
+        $rules = [
+            'inspection_id' => 'required|numeric|is_natural_no_zero',
+            'sector_area_pavement_id' => 'required|numeric|is_natural_no_zero',
+        ];
+
+        if (!$this->validate($rules)) {
+            return $this->validationErrorResponse();
+        }
+
+        $inspection_id = $this->request->getVar('inspection_id');
+        $sector_area_pavement_id = $this->request->getVar('sector_area_pavement_id');
+
+        $fields = [
+            'inspection_id' => $inspection_id,
+            'sector_area_pavement_id' => $sector_area_pavement_id,
+            'is_closed' => 1,
+        ];
+        $query = $this->db->table('inspection_sector');
+        $query
+            ->set($fields)
+            ->where($fields)
+            ->update();
+        return $this->successResponse(INFO_SUCCESS);
+    }
+
     public function getInspecTableList()
     {
         $validationRules = [
