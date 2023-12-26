@@ -139,11 +139,13 @@ class InspectionController extends BaseController
             'is_closed' => 1,
         ];
         $query = $this->db->table('inspection_sector');
+        $getInspectionById = $query->where($fields)->get()->getResultArray();
+        return $this->successResponse(INFO_SUCCESS, $getInspectionById);
+
         $query
             ->set($fields)
             ->where($fields)
             ->update();
-        return $this->successResponse(INFO_SUCCESS);
     }
 
     public function getInspecTableList()
