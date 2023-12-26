@@ -136,16 +136,21 @@ class InspectionController extends BaseController
         $fields = [
             'inspection_id' => $inspection_id,
             'sector_area_pavement_id' => $sector_area_pavement_id,
-            'is_closed' => 1,
         ];
         $query = $this->db->table('inspection_sector');
         $getInspectionById = $query->where($fields)->get()->getResultArray();
-        return $this->successResponse(INFO_SUCCESS, $getInspectionById);
-
+        if (empty($getInspectionById)) {
+            $query
+                ->set('is_closed', 1)
+                ->insert($fields);
+            return $this->successResponse(INFO_SUCCESS);
+        }
         $query
+            ->set('is_closed', 1)
             ->set($fields)
             ->where($fields)
             ->update();
+        return $this->successResponse(INFO_SUCCESS);
     }
 
     public function getInspecTableList()
