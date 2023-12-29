@@ -97,6 +97,7 @@ class InspectionController extends BaseController
             'inspection_id' => 'required|numeric|is_natural_no_zero',
             'client_parent' => 'required|numeric|is_natural_no_zero',
             'system_type_id' => 'required|numeric|is_natural_no_zero',
+            'sector_area_pavement_id' => 'required|numeric|is_natural_no_zero',
         ];
 
         if (!$this->validate($rules)) {
@@ -106,11 +107,13 @@ class InspectionController extends BaseController
         $inspection_id = $this->request->getVar('inspection_id');
         $client_parent = $this->request->getVar('client_parent');
         $system_type_id = $this->request->getVar('system_type_id');
+        $sector_area_pavement_id = $this->request->getVar('sector_area_pavement_id');
 
         $fields = [
             'inspection_id' => $inspection_id,
             'client_id' => $client_parent,
             'system_type_id' => $system_type_id,
+            'sector_area_pavement_id' => $sector_area_pavement_id,
         ];
         $query = $this->db->table('sys_inspection');
         $getInspectionById = $query->where($fields)->get()->getResultArray();
@@ -202,7 +205,7 @@ class InspectionController extends BaseController
         $systems = $systemsQuery->getResultArray();
         $inspectablesQuery = $this->db->table('sys_inspection')
             ->select('system_type_id, client_id, is_closed')
-            ->where(['inspection_id' => $inspectionId, 'client_id' => $clientId])
+            ->where(['inspection_id' => $inspectionId, 'client_id' => $clientId, 'sector_area_pavement_id' => $sectorAreaPavementId])
             ->get();
 
         $inspectables = $inspectablesQuery->getResultArray();
@@ -240,7 +243,7 @@ class InspectionController extends BaseController
         $allClosed = ($closedCount === count($formattedSystems));
         $formattedSystems = array_values(array_unique($formattedSystems, SORT_REGULAR));
         return $this->successResponse(INFO_SUCCESS, [
-            'allClosed' => $allClosed,
+            'allClosed' => empty($formattedSystems) ? false : $allClosed,
             'inspecTables' => $formattedSystems,
         ]);
     }
@@ -494,7 +497,7 @@ class InspectionController extends BaseController
         }, 0);
         $allClosed = ($closedCount === count($maintenanceTypes));
         return $this->successResponse(INFO_SUCCESS, [
-            'allClosed' => $allClosed,
+            'allClosed' => empty($maintenanceTypes) ? false : $allClosed,
             'maintenances' => $maintenanceTypes,
         ]);
     }
@@ -533,7 +536,7 @@ class InspectionController extends BaseController
         }, 0);
         $allClosed = ($closedCount === count($sectors));
         return $this->successResponse(INFO_SUCCESS, [
-            'allClosed' => $allClosed,
+            'allClosed' => empty($sectors) ? false : $allClosed,
             'sectors' => $sectors,
         ]);
     }
