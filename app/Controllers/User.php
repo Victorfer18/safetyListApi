@@ -38,7 +38,7 @@ class User extends BaseController
         if ($getUser["isSafetyList"] == 0) {
             return $this->errorResponse(ERROR_PERMISSION_DENIED);
         }
-        if ($getUser["situation_id"] == 1) {
+        if ($getUser["situation_id"] == 0) {
             return $this->errorResponse(ERROR_ACCOUNT_INACTIVE);
         }
         $token = generateJWT(["user_id" => $getUser["user_id"], "client_id" => $getUser["client_id"]], self::SECRET_KEY());
