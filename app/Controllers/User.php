@@ -27,7 +27,6 @@ class User extends BaseController
         $userEntity->setUserPassword($this->request->getVar('user_password'));
         $conditions = [
             "user_email" => $userEntity->getUserEmail(),
-            "isSafetyList" => 1,
         ];
         $getUser = $userModel->where($conditions)->first();
         if (empty($getUser)) {
@@ -36,7 +35,10 @@ class User extends BaseController
         if ((sha1($userEntity->getUserPassword()) != $getUser["user_password"])) {
             return $this->errorResponse(ERROR_INVALID_USER_OR_PASSWORD);
         }
-        if ($getUser["situation_id"] == 0) {
+        if ($getUser["isSafetyList"] == 0) {
+            return $this->errorResponse(ERROR_PERMISSION_DENIED);
+        }
+        if ($getUser["situation_id"] == 1) {
             return $this->errorResponse(ERROR_ACCOUNT_INACTIVE);
         }
         $token = generateJWT(["user_id" => $getUser["user_id"], "client_id" => $getUser["client_id"]], self::SECRET_KEY());
