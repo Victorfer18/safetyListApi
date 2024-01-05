@@ -22,7 +22,7 @@ define('INFO_ACCOUNT_CREATED', 'Conta criada com sucesso. Verifique seu e-mail p
 define('WARNING_SESSION_EXPIRED', 'Sua sessão expirou. Faça login novamente');
 define('WARNING_PASSWORD_WEAK', 'A senha é fraca. Use uma combinação de letras, números e caracteres especiais');
 define('CONFIRM_DELETE_USER', 'Tem certeza de que deseja excluir este usuário? Esta ação não pode ser desfeita');
-define('ERROR_INVALID_USER_OR_PASSWORD', 'Requisição inválida. Por favor, verifique os dados enviados');
+define('ERROR_INVALID_USER_OR_PASSWORD', 'Usuário ou senha inválidos');
 define('ERROR_ACCOUNT_INACTIVE', 'Sua conta está inativa. Entre em contato com o suporte para obter assistência');
 define('ERROR', 'Algo deu errado. Entre em contato com o suporte para obter assistência');
 
